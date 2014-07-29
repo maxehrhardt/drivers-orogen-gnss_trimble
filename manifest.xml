@@ -1,0 +1,22 @@
+<package>
+  <description brief="Orogen Driver for BD970 GNSS devices">
+  This orogen component offers a common interface for BD970 Trimble receivers.
+  </description>
+  <author>Vassilios Tsounis/vastsoun@gmail.com</author>
+  <author>Javier Hidalgo Carrio/havyhidalgo@gmail.com</author>
+  <license>LGPL v2 or later</license>
+  <url>http://rock-robotics.org<</url>
+  <logo>http://</logo>
+  <depend package="base/cmake" />
+  <!--
+   To add any dependencies use the depend tag
+  <depend package="dummy-dependency-0" />
+	...
+  <depend package="dummy-dependency-n-1" />
+  <depend package="dummy-dependency-n" />
+  -->
+  <depend package="base/orogen/types" />
+  <depend package="drivers/bd970" />
+  <depend package="orogen" />
+  <depend package="tools/logger" />
+</package>
