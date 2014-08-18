@@ -1,0 +1,93 @@
+name "trimble_bd970"
+version "0.1"
+
+using_library "trimble_bd970"
+using_library 'libgps'
+
+import_types_from "base"
+import_types_from "trimble_bd970Types.hpp"
+
+
+
+# Declare a New task context (i.e., the component) 
+# in the trimble_bd970 namespace.
+
+task_context "Task" do
+    
+    needs_configuration
+    
+    #
+    # Driver Properties:
+    #
+    
+    # Serial Input (NMEA) Properties:
+    property('port_nmea', '/std/string', "/dev/ttyUSB0").
+        doc 'the device port'
+    
+    property('baudrate_nmea', 'int', 38400).
+        doc 'Baud rate to open the serial com_port.'
+    
+    property('timeout_nmea', 'double', 1.0).
+        doc 'the expected time (in seconds) to have a whole package in the fd (the device port)';
+    
+    # Serial Output (RTK) Properties:
+    property('port_rtk', '/std/string', "/dev/ttyXR1").
+        doc 'the device port'
+    
+    property('baudrate_rtk', 'int', 38400).
+        doc 'Baud rate to open the serial com_port.'
+    
+    property('timeout_rtk', 'double', 1.0).
+        doc 'the expected time (in seconds) to have a whole package in the fd (the device port)';
+    
+    
+    # GNSS configurations:
+    property("utm_zone", "int", 32).
+        doc "UTM zone for conversion of WGS84 to UTM"
+        
+    property("utm_north", "bool", true).
+        doc "UTM north for conversion of WGS84 to UTM"
+        
+    property("origin", "/base/Position").
+        doc "Origin in UTM coordinates, that is used for position readings."
+    
+    property("period",   "double").
+            doc "the update period"
+    
+    property("fix_threshold", "/trimble_bd970/BD970_AMBIGUITY_THRESHOLD", :BD970_FIX_99_0).
+            doc "The threshold at which the RTK engine will switch to FIX mode."
+    
+    
+    # GNSS output port [1]: 
+    # Data can be written using _gnss_pose.write(value). _gnss_pose.connected() returns
+    # if this output is connected to an input or not.
+    output_port('gnss_pose_samples', '/base/samples/RigidBodyState').
+        doc "Computed position and orientation in UTM coordinates realative to local origin."
+    
+    # GNSS output port [2]: 
+    # This is the raw data from the NMEA messages as reported by the BD970 receiver. 
+    output_port('gnss_data_raw', '/trimble_bd970/GNSS_Raw').
+            doc "The GNSS/NMEA data as reported by the hardware."
+    
+    # GNSS output port [3]: 
+    # Time information regarding the GNSS data.
+    output_port('time', '/trimble_bd970/Time').
+            doc "Output the real time, cpu time and dgps processing latency."
+    
+    # GNSS output port [4]:
+    # Information regarding the GNSS satellites used for position fix. 
+    output_port('constellation', '/trimble_bd970/ConstellationInfo').
+            doc "The status of the GNSS constellations used."
+    
+    
+    # Component Error States
+    error_states :IO_ERROR, :IO_TIMEOUT
+    
+    # If you want that component's updateHook() to be executed when the "command"
+    # port gets data, uncomment this and comment the 'periodic' line
+    # port_driven "command"
+    # By default, the task will be periodic with a period of 0.1
+    periodic 1.0
+    
+end
+
