@@ -1,4 +1,6 @@
-templates/*
+templates/
+resources/
+
 .orogen/*
 *~
 .*.swp
