@@ -91,7 +91,8 @@ bool Task::configureHook()
 {
     mp_bd970 = new Bd970(512, 1.0);
     
-    mp_bd970->setupNMEA(_port_nmea.get(), _baudrate_nmea.get());
+    //mp_bd970->setupNMEA(_port_nmea.get(), _baudrate_nmea.get());
+    mp_bd970->setupNMEA("/home/vassilis/ttyV0", _baudrate_nmea.get());
     
     if (! TaskBase::configureHook())
     {
