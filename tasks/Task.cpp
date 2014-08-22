@@ -6,12 +6,12 @@
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation, either version 3 of the License, or
  *    (at your option) any later version.
- *    
+ *
  *    This program is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
- *    
+ *
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
@@ -55,7 +55,7 @@ Task::Task(std::string const& name, RTT::ExecutionEngine* engine)
 
 Task::~Task()
 {
-    // Do nothing?
+    mp_bd970 = NULL;
 }
 
 
@@ -66,20 +66,14 @@ Task::~Task()
 void Task::processIO()
 {
     /** Retrieve NMEA messages **/
-    mp_bd970->getNMEA();
-    
-    /** Process the NMEA data **/
-    /* TODO */
-    
+    mp_bd970->processNMEA();
+
+    /** Get the Time information **/
+    trimble_bd970::Time time = mp_bd970->getTime();
+
     /* DEBUG + TESTING */
     mp_bd970->printBufferNMEA();
     mp_bd970->printNMEA();
-    
-    /** Output the resulting data **/
-    //_gnss_pose_samples.write();
-    //_gnss_data_raw.write();
-    //_time.write();
-    //_constellation.write();
 }
 
 
@@ -89,16 +83,29 @@ void Task::processIO()
 
 bool Task::configureHook()
 {
-    mp_bd970 = new Bd970(512, 1.0);
-    
-    //mp_bd970->setupNMEA(_port_nmea.get(), _baudrate_nmea.get());
-    mp_bd970->setupNMEA("/home/vassilis/ttyV0", _baudrate_nmea.get());
-    
     if (! TaskBase::configureHook())
     {
         return false;
     }
-    
+
+    /** Serial port connection configuration **/
+    mp_bd970 = new Bd970(DRIVER_BUFFER_SIZE, this->getPeriod());
+
+    mp_bd970->setupNMEA(_serial_port.get(), _serial_baudrate.get());
+
+    /** setup conversion from WGS84 to UTM **/
+    //OGRSpatialReference oSourceSRS;
+    //OGRSpatialReference oTargetSRS;
+
+    //oSourceSRS.SetWellKnownGeogCS(_geodetic_datum.get());
+    //oTargetSRS.SetWellKnownGeogCS(_geodetic_datum.get());
+    //oTargetSRS.SetUTM( _utm_zone, _utm_north );
+
+    //coTransform = OGRCreateCoordinateTransformation( &oSourceSRS,
+    //	    &oTargetSRS );
+
+
+
     return true;
 }
 
@@ -108,14 +115,14 @@ bool Task::startHook()
     {
         return false;
     }
-    
+
     return true;
 }
 
 void Task::updateHook()
 {
     TaskBase::updateHook();
-    
+
     processIO();
 }
 
@@ -132,14 +139,14 @@ void Task::stopHook()
 void Task::cleanupHook()
 {
     mp_bd970->closeNMEA();
-    
+
     delete mp_bd970;
-    
+
     TaskBase::cleanupHook();
 }
 
 
 
 /**
- * 
+ *
  */
