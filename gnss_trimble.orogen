@@ -77,7 +77,7 @@ task_context "Task" do
     # If you want that component's updateHook() to be executed when the "command"
     # port gets data, uncomment this and comment the 'periodic' line
     # port_driven "<port_name>"
-    periodic 1.0
+    periodic 0.1
 
 end
 

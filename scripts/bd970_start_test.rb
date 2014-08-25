@@ -18,13 +18,16 @@ Orocos.run 'gnss_trimble::Task' => 'test_task' do
     test_task = Orocos.name_service.get 'test_task'
     test_task.serial_port = ARGV[0]
     test_task.serial_baudrate = 38400
-    test_task.serial_timeout = 1.0
+    test_task.serial_timeout = 0.1
 
     test_task.geodetic_datum = "WGS84"
     test_task.utm_zone = 31
     test_task.utm_north = true
 
     test_task.configure
+
+    ## Log all the ports
+    Orocos.log_all
 
     ## Start the tasks ##
     test_task.start
