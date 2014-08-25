@@ -35,7 +35,7 @@
 /**
  * 
  */
-using namespace trimble_bd970;
+using namespace gnss_trimble;
 
 
 /**
@@ -69,14 +69,14 @@ void Task::processIO()
     mp_bd970->processNMEA();
 
     /** Get the Time information **/
-    trimble_bd970::Time gnss_time = mp_bd970->getTime();
+    gnss_trimble::Time gnss_time = mp_bd970->getTime();
     _time.write(gnss_time);
 
     /** Solution pose **/
-    trimble_bd970::Solution gnss_solution = mp_bd970->getSolution();
+    gnss_trimble::Solution gnss_solution = mp_bd970->getSolution();
     _raw_data.write(gnss_solution);
 
-    if(gnss_solution.positionType != trimble_bd970::NO_SOLUTION)
+    if(gnss_solution.positionType != gnss_trimble::NO_SOLUTION)
     {
         double la = gnss_solution.latitude;
         double lo = gnss_solution.longitude;

@@ -1,13 +1,13 @@
-name "trimble_bd970"
+name "gnss_trimble"
 version "0.1"
 
-using_library "trimble_bd970"
+using_library "gnss_trimble"
 
 import_types_from "base"
-import_types_from "trimble_bd970/GNSSTypes.hpp"
+import_types_from "gnss_trimble/GNSSTypes.hpp"
 
 # Declare a New task context (i.e., the component)
-# in the trimble_bd970 namespace.
+# in the gnss_trimble namespace.
 
 task_context "Task" do
     needs_configuration
@@ -27,6 +27,7 @@ task_context "Task" do
         doc 'the expected time (in seconds) to have a whole package in the fd (the device port)';
 
 
+
     # GNSS configurations:
     property("geodetic_datum", "std::string", "WGS84").
         doc "Geodetic datum typically NAD83 or WGS84 "
@@ -36,6 +37,10 @@ task_context "Task" do
 
     property("utm_north", "bool", true).
         doc "UTM north for conversion of WGS84 to UTM"
+
+    property('gnss_source_frame', '/std/string').doc 'From Frame for the transformer'
+
+    property('gnss_target_frame', '/std/string').doc 'To Frame for the transformer'
 
     property("pose_origin", "/base/Position").
         doc "Origin in UTM coordinates, that is used for position readings."
@@ -52,17 +57,17 @@ task_context "Task" do
 
     # GNSS output port [2]:
     # This is the raw data from the NMEA messages as reported by the BD970 receiver. 
-    output_port('raw_data', '/trimble_bd970/Solution').
+    output_port('raw_data', '/gnss_trimble/Solution').
         doc "The GNSS/NMEA data as reported by the hardware."
 
     # GNSS output port [3]:
     # Time information regarding the GNSS data.
-    output_port('time', '/trimble_bd970/Time').
+    output_port('time', '/gnss_trimble/Time').
         doc "Output the real time, cpu time and dgps processing latency."
 
     # GNSS output port [4]:
     # Information regarding the GNSS satellites used for position fix. 
-    output_port('constellation', '/trimble_bd970/ConstellationInfo').
+    output_port('constellation', '/gnss_trimble/ConstellationInfo').
         doc "The status of the GNSS constellations used."
 
 

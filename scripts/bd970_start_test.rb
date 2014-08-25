@@ -12,7 +12,7 @@ ENV['PKG_CONFIG_PATH'] = "#{File.expand_path("..", File.dirname(__FILE__))}/buil
 Orocos.initialize
 
 ## Execute the task 'message_producer::Task' ##
-Orocos.run 'trimble_bd970::Task' => 'test_task' do
+Orocos.run 'gnss_trimble::Task' => 'test_task' do
 
     ## Get the task context##
     test_task = Orocos.name_service.get 'test_task'

@@ -28,8 +28,8 @@
 #define TRIMBLE_BD970_TASK_TASK_HPP
 
 
-#include <trimble_bd970/Bd970.hpp>
-#include "trimble_bd970/TaskBase.hpp"
+#include <gnss_trimble/Bd970.hpp>
+#include "gnss_trimble/TaskBase.hpp"
 
 #include <ogr_spatialref.h>
 
@@ -37,7 +37,7 @@
 /**
  * 
  */
-namespace trimble_bd970 
+namespace gnss_trimble 
 {
 
     static const int DRIVER_BUFFER_SIZE = 512;
@@ -63,13 +63,12 @@ namespace trimble_bd970
             /** Pointer to the driver **/
             Bd970* mp_bd970;
 
-
         public:
             /** TaskContext constructor for Task
              * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.
              * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
              */
-            Task(std::string const& name = "trimble_bd970::Task");
+            Task(std::string const& name = "gnss_trimble::Task");
 
             /** TaskContext constructor for Task 
              * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices. 

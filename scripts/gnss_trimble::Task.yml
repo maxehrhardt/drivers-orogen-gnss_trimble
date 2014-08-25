@@ -6,7 +6,7 @@ serial_baudrate: 38400
 # the expected time (in seconds) to have a whole package in the fd (the device port)
 serial_timeout: 1.0
 # UTM zone for conversion of WGS84 to UTM
-utm_zone: 32
+utm_zone: 31
 # UTM north for conversion of WGS84 to UTM
 utm_north: true
 # Geodetic datum typically NAD83 or WGS84 
