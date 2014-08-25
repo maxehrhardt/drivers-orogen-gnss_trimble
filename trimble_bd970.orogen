@@ -31,7 +31,7 @@ task_context "Task" do
     property("geodetic_datum", "std::string", "WGS84").
         doc "Geodetic datum typically NAD83 or WGS84 "
 
-    property("utm_zone", "int", 32).
+    property("utm_zone", "int", 31).
         doc "UTM zone for conversion of WGS84 to UTM"
 
     property("utm_north", "bool", true).
