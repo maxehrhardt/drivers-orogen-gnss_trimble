@@ -11,7 +11,7 @@
   <url>http://rock-robotics.org</url>
   <depend package="base/cmake" />
 
-  <depend package="drivers/trimble_bd970" />
+  <depend package="drivers/gnss_trimble" />
 
   <depend package="proj"/>
   <depend package="gdal"/>
