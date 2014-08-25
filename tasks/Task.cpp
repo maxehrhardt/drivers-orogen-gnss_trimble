@@ -83,14 +83,20 @@ void Task::processIO()
         double alt = gnss_solution.altitude;
 
         coTransform->Transform(1, &lo, &la, &alt);
-        base::samples::RigidBodyState gnss_pose;
         gnss_pose.time = gnss_solution.time;
+
+        /** Position **/
         gnss_pose.position.x() = lo - _pose_origin.value().x();
         gnss_pose.position.y() = la - _pose_origin.value().y();
         gnss_pose.position.z() = alt - _pose_origin.value().z();
         gnss_pose.cov_position(0, 0) = gnss_solution.deviationLongitude * gnss_solution.deviationLongitude;
         gnss_pose.cov_position(1, 1) = gnss_solution.deviationLatitude * gnss_solution.deviationLatitude;
         gnss_pose.cov_position(2, 2) = gnss_solution.deviationAltitude * gnss_solution.deviationAltitude;
+
+        /** Orientation **/
+        gnss_pose.orientation = mp_bd970->getOrientation();
+        gnss_pose.cov_orientation = mp_bd970->getOrientationUncertainty();
+
         _pose_samples.write(gnss_pose);
     }
 
@@ -132,6 +138,11 @@ bool Task::configureHook()
 	RTT::log(RTT::Error) << "failed to initialize CoordinateTransform UTM_ZONE:" << _utm_zone << " UTM_NORTH:" << _utm_north << RTT::endlog();
 	return false;
     }
+
+    /** Initial invalid pose **/
+    gnss_pose.invalidate();
+    gnss_pose.sourceFrame = _gnss_source_frame.get();
+    gnss_pose.targetFrame = _gnss_target_frame.get();
 
     return true;
 }
