@@ -2,12 +2,11 @@ name "trimble_bd970"
 version "0.1"
 
 using_library "trimble_bd970"
-using_library 'libgps'
 
 import_types_from "base"
 import_types_from "trimble_bd970/GNSSTypes.hpp"
 
-# Declare a New task context (i.e., the component) 
+# Declare a New task context (i.e., the component)
 # in the trimble_bd970 namespace.
 
 task_context "Task" do
@@ -38,7 +37,7 @@ task_context "Task" do
     property("utm_north", "bool", true).
         doc "UTM north for conversion of WGS84 to UTM"
 
-    property("origin", "/base/Position").
+    property("pose_origin", "/base/Position").
         doc "Origin in UTM coordinates, that is used for position readings."
 
     #******************************
@@ -48,12 +47,12 @@ task_context "Task" do
     # GNSS output port [1]:
     # Data can be written using _gnss_pose.write(value). _gnss_pose.connected() returns
     # if this output is connected to an input or not.
-    output_port('gnss_pose_samples', '/base/samples/RigidBodyState').
+    output_port('pose_samples', '/base/samples/RigidBodyState').
         doc "Computed position and orientation in UTM coordinates relative to local origin."
 
     # GNSS output port [2]:
     # This is the raw data from the NMEA messages as reported by the BD970 receiver. 
-    output_port('gnss_data_raw', '/trimble_bd970/Solution').
+    output_port('raw_data', '/trimble_bd970/Solution').
         doc "The GNSS/NMEA data as reported by the hardware."
 
     # GNSS output port [3]:

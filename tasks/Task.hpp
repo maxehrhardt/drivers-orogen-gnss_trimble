@@ -31,7 +31,7 @@
 #include <trimble_bd970/Bd970.hpp>
 #include "trimble_bd970/TaskBase.hpp"
 
-//#include <ogr_spatialref.h>
+#include <ogr_spatialref.h>
 
 
 /**
@@ -58,7 +58,7 @@ namespace trimble_bd970
         protected:
 
             /** GDAL Interface for transforming between coordinate systems **/
-    	    //OGRCoordinateTransformation *coTransform;
+    	    OGRCoordinateTransformation *coTransform;
 
             /** Pointer to the driver **/
             Bd970* mp_bd970;

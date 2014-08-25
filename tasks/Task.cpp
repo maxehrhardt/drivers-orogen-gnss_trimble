@@ -69,7 +69,31 @@ void Task::processIO()
     mp_bd970->processNMEA();
 
     /** Get the Time information **/
-    trimble_bd970::Time time = mp_bd970->getTime();
+    trimble_bd970::Time gnss_time = mp_bd970->getTime();
+    _time.write(gnss_time);
+
+    /** Solution pose **/
+    trimble_bd970::Solution gnss_solution = mp_bd970->getSolution();
+    _raw_data.write(gnss_solution);
+
+    if(gnss_solution.positionType != trimble_bd970::NO_SOLUTION)
+    {
+        double la = gnss_solution.latitude;
+        double lo = gnss_solution.longitude;
+        double alt = gnss_solution.altitude;
+
+        coTransform->Transform(1, &lo, &la, &alt);
+        base::samples::RigidBodyState gnss_pose;
+        gnss_pose.time = gnss_solution.time;
+        gnss_pose.position.x() = lo - _pose_origin.value().x();
+        gnss_pose.position.y() = la - _pose_origin.value().y();
+        gnss_pose.position.z() = alt - _pose_origin.value().z();
+        gnss_pose.cov_position(0, 0) = gnss_solution.deviationLongitude * gnss_solution.deviationLongitude;
+        gnss_pose.cov_position(1, 1) = gnss_solution.deviationLatitude * gnss_solution.deviationLatitude;
+        gnss_pose.cov_position(2, 2) = gnss_solution.deviationAltitude * gnss_solution.deviationAltitude;
+        _pose_samples.write(gnss_pose);
+    }
+
 
     /* DEBUG + TESTING */
     mp_bd970->printBufferNMEA();
@@ -94,17 +118,20 @@ bool Task::configureHook()
     mp_bd970->setupNMEA(_serial_port.get(), _serial_baudrate.get());
 
     /** setup conversion from WGS84 to UTM **/
-    //OGRSpatialReference oSourceSRS;
-    //OGRSpatialReference oTargetSRS;
+    OGRSpatialReference oSourceSRS;
+    OGRSpatialReference oTargetSRS;
 
-    //oSourceSRS.SetWellKnownGeogCS(_geodetic_datum.get());
-    //oTargetSRS.SetWellKnownGeogCS(_geodetic_datum.get());
-    //oTargetSRS.SetUTM( _utm_zone, _utm_north );
+    oSourceSRS.SetWellKnownGeogCS(_geodetic_datum.get().c_str());
+    oTargetSRS.SetWellKnownGeogCS(_geodetic_datum.get().c_str());
+    oTargetSRS.SetUTM( _utm_zone, _utm_north );
 
-    //coTransform = OGRCreateCoordinateTransformation( &oSourceSRS,
-    //	    &oTargetSRS );
+    coTransform = OGRCreateCoordinateTransformation(&oSourceSRS, &oTargetSRS);
 
-
+    if( coTransform == NULL )
+    {
+	RTT::log(RTT::Error) << "failed to initialize CoordinateTransform UTM_ZONE:" << _utm_zone << " UTM_NORTH:" << _utm_north << RTT::endlog();
+	return false;
+    }
 
     return true;
 }
