@@ -143,6 +143,7 @@ bool Task::configureHook()
     gnss_pose.invalidate();
     gnss_pose.sourceFrame = _gnss_source_frame.get();
     gnss_pose.targetFrame = _gnss_target_frame.get();
+    gnss_pose.cov_position.setZero(); //set to zero to put the variance afterwards in the updateHook
 
     return true;
 }
