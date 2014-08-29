@@ -16,20 +16,17 @@ Orocos.run 'gnss_trimble::Task' => 'test_task' do
 
     ## Get the task context##
     test_task = Orocos.name_service.get 'test_task'
+    Orocos.conf.load_dir('../config')
+    Orocos.conf.apply(test_task, ['EvaluationBoard', 'ESTEC'], :override => true)
     test_task.serial_port = ARGV[0]
-    test_task.serial_baudrate = 38400
-    test_task.serial_timeout = 0.1
 
-    test_task.geodetic_datum = "WGS84"
-    test_task.utm_zone = 31
-    test_task.utm_north = true
-
+    ## Configure the task ##
     test_task.configure
 
     ## Log all the ports
-    Orocos.log_all
+    Orocos.log_all_ports
 
-    ## Start the tasks ##
+    ## Start the task ##
     test_task.start
 
     #reader = test_task.messages.reader
@@ -41,7 +38,5 @@ Orocos.run 'gnss_trimble::Task' => 'test_task' do
     end
 
     test_task.stop
-
     test_task.cleanup
-
 end
