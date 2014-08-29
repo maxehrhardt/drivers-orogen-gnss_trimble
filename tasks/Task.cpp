@@ -89,9 +89,10 @@ void Task::processIO()
         gnss_pose.position.x() = lo - _pose_origin.value().x();
         gnss_pose.position.y() = la - _pose_origin.value().y();
         gnss_pose.position.z() = alt - _pose_origin.value().z();
-        gnss_pose.cov_position(0, 0) = gnss_solution.deviationLongitude * gnss_solution.deviationLongitude;
+        gnss_pose.cov_position = mp_bd970->getPositionUncertainty();
+        /*gnss_pose.cov_position(0, 0) = gnss_solution.deviationLongitude * gnss_solution.deviationLongitude;
         gnss_pose.cov_position(1, 1) = gnss_solution.deviationLatitude * gnss_solution.deviationLatitude;
-        gnss_pose.cov_position(2, 2) = gnss_solution.deviationAltitude * gnss_solution.deviationAltitude;
+        gnss_pose.cov_position(2, 2) = gnss_solution.deviationAltitude * gnss_solution.deviationAltitude;*/
 
         /** Orientation **/
         gnss_pose.orientation = mp_bd970->getOrientation();
