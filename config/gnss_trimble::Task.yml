@@ -15,7 +15,7 @@ serial_baudrate: 38400
 serial_timeout: 0.1
 
 
---- name:ESTEC
+--- name:Netherlands
 # UTM zone for conversion of WGS84 to UTM
 utm_zone: 31
 # UTM north for conversion of WGS84 to UTM
@@ -28,12 +28,23 @@ gnss_source_frame: "body" #transformer names. No transformation convention
 # to frame for the transformer
 gnss_target_frame: "world_osg" #transformer names. No transformation convention
 
+
+--- name:ESTEC
 # Origin in UTM coordinates, that is used for position readings.
 pose_origin:
   data:
   - 597220.14273647161
   - 5786238.5623347349
   - 2.9529999999999998
+
+--- name:DECOS
+# Origin in UTM coordinates, that is used for position readings.
+pose_origin:
+  data:
+  - 597220.14273647161
+  - 5786238.5623347349
+  - 2.9529999999999998
+
 
 # no documentation available for this property
 #metadata:

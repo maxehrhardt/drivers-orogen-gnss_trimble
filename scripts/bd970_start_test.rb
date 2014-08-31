@@ -17,7 +17,7 @@ Orocos.run 'gnss_trimble::Task' => 'test_task' do
     ## Get the task context##
     test_task = Orocos.name_service.get 'test_task'
     Orocos.conf.load_dir('../config')
-    Orocos.conf.apply(test_task, ['EvaluationBoard', 'ESTEC'], :override => true)
+    Orocos.conf.apply(test_task, [ 'ExoTer', 'Netherlands','DECOS'], :override => true)
     test_task.serial_port = ARGV[0]
 
     ## Configure the task ##
