@@ -5,10 +5,13 @@
 
   <author>Vassilios Tsounis/vastsoun@gmail.com</author>
   <author>Javier Hidalgo Carrio/havyhidalgo@gmail.com</author>
+  <maintainer>Martin Azkarate/Martin.Azkarate@esa.int</maintainer>
 
   <license>GPLv3</license>
 
   <url>http://rock-robotics.org</url>
+  <url>http://www.trimble.com</url>
+
   <depend package="base/cmake" />
 
   <depend package="drivers/gnss_trimble" />
