@@ -103,8 +103,8 @@ void Task::processIO()
 
 
     /* DEBUG + TESTING */
-    mp_bd970->printBufferNMEA();
-    mp_bd970->printNMEA();
+    /*mp_bd970->printBufferNMEA();
+    mp_bd970->printNMEA();*/
 }
 
 
