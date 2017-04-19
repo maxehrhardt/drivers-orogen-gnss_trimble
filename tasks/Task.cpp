@@ -100,7 +100,30 @@ void Task::processIO()
 
         _pose_samples.write(gnss_pose);
     }
-
+    
+    switch(gnss_solution.positionType)
+    {
+    case gnss_trimble::INVALID:
+        state(INVALID);
+        break;
+    case gnss_trimble::NO_SOLUTION:
+        state(NO_SOLUTION);
+        break;
+    case gnss_trimble::AUTONOMOUS:
+        state(AUTONOMOUS);
+        break;
+    case gnss_trimble::RTK_FLOAT:
+        state(RTK_FLOAT);
+        break;
+    case gnss_trimble::RTK_FIXED:
+        state(RTK_FIXED);
+        break;
+    case gnss_trimble::DIFFERENTIAL:
+        state(DIFFERENTIAL);
+        break;
+    default:
+        state(RUNNING);
+    }
 
     /* DEBUG + TESTING */
     /*mp_bd970->printBufferNMEA();
